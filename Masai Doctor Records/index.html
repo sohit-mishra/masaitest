@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Masai Doctor Records</title>
+    <style>
+        body {
+            display: flex;
+            width: 95%;
+            margin: 100px auto;
+        }
+
+        form {
+            width: 350px;
+            box-shadow: 0px 0px 4px -1px #cdcdcd;
+            padding: 20px;
+            border-radius: 5px;
+            margin: auto;
+            margin-top: 20px;
+        }
+
+        label {
+            font-size: large;
+        }
+
+        input,
+        select {
+            border: 0;
+            box-shadow: 0px 0px 3px -1px #29629c;
+            width: calc(100% - 20px);
+            padding: 8px;
+            outline: none;
+            border-radius: 3px;
+            margin: 5px 0 15px;
+        }
+
+        form select {
+            width: calc(100% - 5px);
+        }
+        form + select{
+            width: 250px;
+            height: 40px;
+            margin-right: 20px;
+            position: absolute;
+            right: 0;
+            top: 30px;
+        }
+        input[type="submit" i] {
+            width: calc(100% - 5px);
+            border-radius: 15px;
+            background: #29629c;
+            color: #fff;
+            border: 0;
+            outline: 0;
+            font-size: large;
+            border: 0;
+            outline: 0;
+        }
+
+        table {
+            font-family: Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 60%;
+            margin: auto;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        table td,
+        table th {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        table th {
+            background-color: #29629c;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Use this form for data input  -->
+    <form>
+        <label for="name">Doctor Name</label>
+        <input placeholder="Name" type="text" id="name" />
+        <label for="name">Doctor Name</label>
+        <input placeholder="Doctor ID" type="text" id="doctor_id" />
+        <label for="specialization">Specialization</label>
+        <select id="specialization">
+            <option value="">Select Specialization</option>
+            <option value="Dermatologist">Dermatologist</option>
+            <option value="Dentist">Dentist</option>
+            <option value="Gynecologist">Gynecologist</option>
+        </select>
+        <label for="name">Experience</label>
+        <input placeholder="Experience" type="number" id="experience" />
+        <label for="email">Email</label>
+        <input placeholder="Email" type="email" id="email" />
+        <label for="mobile">Mobile</label>
+        <input placeholder="Mobile No." type="number" id="mobile" />
+        <input type="submit" value="Submit" />
+    </form>
+
+    <!-- Use this Select tag for filter part  -->
+    <select id="filter">
+        <option value="">Select Specialization</option>
+        <option value="Dermatologist">Dermatologist</option>
+        <option value="Dentist">Dentist</option>
+        <option value="Gynecologist">Gynecologist</option>
+    </select>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Doctor ID</th>
+                <th>Specialization</th>
+                <th>Experience in Years</th>
+                <th>Email</th>
+                <th>Mobile No</th>
+                <th>Role</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Append Rows here using JS & DOM  -->
+        </tbody>
+    </table>
+</body>
+
+<script>
+    var arr = [];
+    var sumbit_btn = document.querySelector("input[type='submit']");
+
+    sumbit_btn.addEventListener(
+        'click', function (e) {
+            e.preventDefault();
+            var tablebody = document.querySelector("tbody");
+            tablebody.innerText = "";
+
+            var name = document.querySelector("#name");
+            var doctor_id = document.querySelector("#doctor_id");
+            var specialization = document.querySelector("#specialization");
+            var experience = document.querySelector("#experience");
+            var email = document.querySelector("#email");
+            var mobile = document.querySelector("#mobile");
+
+            var obj = {
+                Name: name.value,
+                Doctor_id: doctor_id.value,
+                Specialization: specialization.value,
+                Experience: experience.value,
+                Email: email.value,
+                Mobile: mobile.value
+            }
+            arr.push(obj);
+            localStorage.setItem("Doctor", JSON.stringify(arr));
+            console.log(JSON.parse(localStorage.getItem("Doctor")));
+
+
+
+
+
+            arr.forEach(element => {
+                var tabRow = document.createElement("tr");
+
+                var bag = "";  //stores the experience so the use role
+                var objectdata = element;
+                for (let x in objectdata) {
+                    var objecttd = document.createElement("td");
+                    objecttd.innerText = objectdata[x];
+                    tabRow.append(objecttd);
+                    bag = objectdata['Experience'];
+                }
+
+
+                var roletd = document.createElement("td");
+                if (Number(bag > 5)) {
+                    roletd.innerText = "Senior";
+                } else if (Number(bag) > 2 && Number(bag) < 5) {
+                    roletd.innerText = "Junior";
+                } else {
+                    roletd.innerText = "Trainee";
+                }
+                tabRow.append(roletd);
+
+                var btntd = document.createElement("td");
+                var btn = document.createElement("Button");
+                btn.innerText = "Delete";
+                btntd.append(btn);
+
+                btn.addEventListener("click", function () {
+                    var index = arr.indexOf(element);
+                    if (index !== -1) {
+                        arr.splice(index, 1);
+                    }
+                    tabRow.remove();
+                    console.log(arr);
+                })
+
+                tabRow.append(btntd);
+                var tbody = document.querySelector("tbody");
+                tbody.append(tabRow);
+
+            })
+        }
+    )
+
+
+var select = document.querySelector("#filter");
+
+select.addEventListener(
+    'onselect', function () {
+       var filter =  document.querySelector("#filter").value;
+       var tablerowSpec = document.querySelectorAll("tr");
+    }
+)
+</script>
+
+</html>
